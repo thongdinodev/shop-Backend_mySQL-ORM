@@ -6,5 +6,8 @@ router
     .route('/')
     .get(productController.getAllProducts)
 
-
+router
+    .route('/')
+    .post(productController.createProduct)
+    
 module.exports = router

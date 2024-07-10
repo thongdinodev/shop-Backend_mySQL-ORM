@@ -11,7 +11,8 @@ const Product = sequelize.define('product', {
     name: {
         type: Sequelize.STRING,
         trim: true,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     price: {
         type: Sequelize.INTEGER,
