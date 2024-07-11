@@ -18,4 +18,8 @@ router
     .route('/:productId')
     .patch(productController.updateProduct)    
 
+router
+    .route('/:productId')
+    .delete(productController.deleteProduct)   
+
 module.exports = router

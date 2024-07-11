@@ -1,10 +1,9 @@
-const { where } = require('sequelize')
 const Product = require('../models/productModel')
 
 const handleTryCatchError = require('../utils/handleTryCatchError')
+const {productValidate} = require('../utils/validation')
 
 exports.getAllProducts = async (req, res, next) => {
-    
     try {
         const products = await Product.findAll()
         res.status(200).json({
@@ -25,17 +24,27 @@ exports.createProduct = async (req, res, next) => {
     const imageUrl = req.body.imageUrl
 
     const inputData = {name, price, description, imageUrl}
-    try {    
-        const newProduct = await Product.create(inputData)
 
-        res.status(201).json({
-            status: 'success',
-            newProduct: {
-                newProduct
-            }
-        })
+    try {    
+        // VALIDATE BEFORE HANDLE DATA
+        const {error, value} = productValidate(inputData)
+        console.log('====ERROR====', error);
+        if (error) {
+            //handleTryCatchError(res, 400, `${error.details[0].message}`)
+            handleTryCatchError(res, 400, error.details[0].message)
+        } else {
+            const newProduct = await Product.create(inputData)
+    
+            res.status(201).json({
+                status: 'success',
+                newProduct: {
+                    newProduct
+                }
+            })
+        }
     } catch (error) {
-        handleTryCatchError(res, 400, error.errors[0].message)
+        console.log(error);
+        handleTryCatchError(res, 400, error)
     }
 }
 
@@ -55,6 +64,7 @@ exports.getProduct = async (req, res, next) => {
         }
         
     } catch (error) {
+        console.log(error);
         handleTryCatchError(res, 400, error)
     }
 }
@@ -87,6 +97,7 @@ exports.updateProduct = async (req, res, next) => {
             })
         }
     } catch (error) {
+        console.log(error);
         handleTryCatchError(res, 400, error)
     }
 
@@ -104,7 +115,8 @@ exports.deleteProduct = async (req, res, next) => {
                 message: 'Success delete product'
             })
         }
-    } catch (error) {
+    } catch (error) {        
+        console.log(error);
         handleTryCatchError(res, 400, error)
     }
 }
