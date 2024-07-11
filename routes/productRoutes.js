@@ -10,4 +10,12 @@ router
     .route('/')
     .post(productController.createProduct)
     
+router
+    .route('/:productId')
+    .get(productController.getProduct)
+
+router
+    .route('/:productId')
+    .patch(productController.updateProduct)    
+
 module.exports = router
