@@ -30,7 +30,6 @@ exports.createProduct = async (req, res, next) => {
         const {error, value} = productValidate(inputData)
         console.log('====ERROR====', error);
         if (error) {
-            //handleTryCatchError(res, 400, `${error.details[0].message}`)
             handleTryCatchError(res, 400, error.details[0].message)
         } else {
             const newProduct = await Product.create(inputData)
@@ -53,7 +52,7 @@ exports.getProduct = async (req, res, next) => {
     try {
         const product = await Product.findByPk(prodId)
         if (!product) {
-            handleTryCatchError(res, 400, `Can't find any product with id: ${prodId}`)
+            handleTryCatchError(res, 404, `Can't find any product with id: ${prodId}`)
         } else {
             res.status(200).json({
                 status: 'success',
@@ -80,7 +79,7 @@ exports.updateProduct = async (req, res, next) => {
     try {
         const product = await Product.findByPk(prodId)
         if (!product) {
-            handleTryCatchError(res, 400, `Can't find any product with id: ${prodId} to edit`)
+            handleTryCatchError(res, 404, `Can't find any product with id: ${prodId} to edit`)
         } else {
             product.name = updateName ? updateName : product.name
             product.price = updatePrice ? updatePrice : product.price
@@ -108,7 +107,7 @@ exports.deleteProduct = async (req, res, next) => {
     try {
         const productDeleted = await Product.destroy({where: {id: prodId}})
         if (!productDeleted) {
-            handleTryCatchError(res, 400, `Can't find any product with id: ${prodId}`)
+            handleTryCatchError(res, 404, `Can't find any product with id: ${prodId}`)
         } else {
             res.status(204).json({
                 status: 'success',
