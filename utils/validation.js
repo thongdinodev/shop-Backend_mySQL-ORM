@@ -25,7 +25,21 @@ const productValidate = data => {
     return productSchema.validate(data)
 }
 
+const userValidate = data => {
+    const userSchema = Joi.object({
+        username: Joi.string()
+                .alphanum()
+                .required(),
+        email: Joi.string()
+                // .email({ minDomainSegments: 2, tlds: { allow: ['com'] } })
+                .required()
+    })
+
+    return userSchema.validate(data)
+}
+
 
 module.exports = {
-    productValidate
+    productValidate,
+    userValidate
 }
